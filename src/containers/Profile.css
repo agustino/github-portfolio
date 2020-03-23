@@ -1,0 +1,20 @@
+.profile {
+  width: 50%;
+  margin: 16px auto;
+}
+
+.profile__avatar {
+  width: 150px;
+  height: 150px;
+}
+
+.profile__list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.profile__item {
+  display: flex;
+  justify-content: space-between;
+}
