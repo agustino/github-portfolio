@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 // import Link from "../components/Link/Link";
+import List from "../components/List";
 
 import "./Profile.css";
 
@@ -30,6 +31,24 @@ class Profile extends Component {
     if (loading) {
       return <div>Loading…</div>;
     }
+
+    const items = [
+      {
+        label: "html_url",
+        value: (
+          <a href={data.html_url} title="Github URL">
+            {data.html_url}
+          </a>
+        )
+      },
+      { label: "repos_url", value: data.repos_url },
+      { label: "name", value: data.name },
+      { label: "company", value: data.company },
+      { label: "location", value: data.location },
+      { label: "email", value: data.email },
+      { label: "bio", value: data.bio }
+    ];
+
     return (
       <div className="profile">
         <img
@@ -37,30 +56,7 @@ class Profile extends Component {
           src={data.avatar_url}
           alt="profile avatar"
         />
-        <ul className="profile__list">
-          <li className="profile__item">
-            <strong>html_url:</strong>
-            <a href={data.html_url}>{data.html_url}</a>
-          </li>
-          <li className="profile__item">
-            <strong>repos_url:</strong> {data.repos_url}
-          </li>
-          <li className="profile__item">
-            <strong>name:</strong> {data.name}
-          </li>
-          <li className="profile__item">
-            <strong>company:</strong> {data.company}
-          </li>
-          <li className="profile__item">
-            <strong>location:</strong> {data.location}
-          </li>
-          <li className="profile__item">
-            <strong>email:</strong> {data.email}
-          </li>
-          <li className="profile__item">
-            <strong>bio:</strong> {data.bio}
-          </li>
-        </ul>
+        <List items={items} />
       </div>
     );
   }
