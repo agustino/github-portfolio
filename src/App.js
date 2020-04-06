@@ -1,14 +1,18 @@
 import React from "react";
+import styled from "styled-components";
 import Header from "./components/Header";
 import Profile from "./containers/Profile";
-import "./App.css";
+
+const StyledApp = styled.div`
+  text-align: center;
+`;
 
 function App() {
   return (
-    <div className="App">
+    <StyledApp className="App">
       <Header />
       <Profile />
-    </div>
+    </StyledApp>
   );
 }
 
