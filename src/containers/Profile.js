@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import Link from "../components/Link/Link";
+import Link from "../components/Link";
 import List from "../components/List";
 
 import "./Profile.css";
@@ -9,27 +9,40 @@ class Profile extends Component {
     super();
     this.state = {
       data: {},
-      loading: true
+      repositories: [],
+      loading: true,
+      error: "",
     };
   }
 
   async componentDidMount() {
-    const profile = await fetch("https://api.github.com/users/agustino");
-    const profileJSON = await profile.json();
+    try {
+      const profile = await fetch("https://api.github.com/users/agustino");
+      const profileJSON = await profile.json();
 
-    if (profileJSON) {
+      if (profileJSON) {
+        const repos = await fetch(profileJSON.repos_url);
+        const reposJSON = await repos.json();
+
+        this.setState({
+          data: profileJSON,
+          repositories: reposJSON,
+          loading: false,
+        });
+      }
+    } catch (error) {
       this.setState({
-        data: profileJSON,
-        loading: false
+        loading: false,
+        error: error.message,
       });
     }
   }
 
   render() {
-    const { data, loading } = this.state;
+    const { data, loading, repositories, error } = this.state;
 
-    if (loading) {
-      return <div>Loading…</div>;
+    if (loading || error) {
+      return <div>{loading ? "Loading…" : error}</div>;
     }
 
     const items = [
@@ -39,15 +52,20 @@ class Profile extends Component {
           <a href={data.html_url} title="Github URL">
             {data.html_url}
           </a>
-        )
+        ),
       },
       { label: "repos_url", value: data.repos_url },
       { label: "name", value: data.name },
       { label: "company", value: data.company },
       { label: "location", value: data.location },
       { label: "email", value: data.email },
-      { label: "bio", value: data.bio }
+      { label: "bio", value: data.bio },
     ];
+
+    const projects = repositories.map((repository) => ({
+      label: repository.name,
+      value: <Link url={repository.html_url} title="Github URL" />,
+    }));
 
     return (
       <div className="profile">
@@ -56,7 +74,8 @@ class Profile extends Component {
           src={data.avatar_url}
           alt="profile avatar"
         />
-        <List items={items} />
+        <List title="Profile" items={items} />
+        <List title="Projects" items={projects} />
       </div>
     );
   }
